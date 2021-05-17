@@ -1,0 +1,27 @@
+site:
+  name: INM
+  hosts:
+    - cn01:
+        hostname: 10.0.110.30
+        port: 8889
+        type: CaptureNode
+    - cn02:
+        hostname: 10.0.110.31
+        port: 8889
+        type: CaptureNode
+    - cn03:
+        hostname: 10.0.110.32
+        port: 8889
+        type: CaptureNode
+    - cn04:
+        hostname: 10.0.110.33
+        port: 8889
+        type: CaptureNode
+    - cn05:
+        hostname: 10.0.110.34
+        port: 8889
+        type: CaptureNode
+    - cn06:
+        hostname: 10.0.110.35
+        port: 8889
+        type: CaptureNode

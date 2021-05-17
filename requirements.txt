@@ -1,0 +1,5 @@
+atom==0.6.0
+Cython==0.29.23
+pycapnp==1.0.0
+PyYAML==5.4.1
+pyzmq==22.0.3

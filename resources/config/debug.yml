@@ -1,0 +1,11 @@
+site:
+  name: debugging
+  hosts:
+    - debug:
+        rpc:
+          hostname: localhost
+          port: 60000
+        type: CaptureNode
+        monitor:
+          hostname: 0.0.0.0
+          port: 3334

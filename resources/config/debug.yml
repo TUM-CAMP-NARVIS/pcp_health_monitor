@@ -1,11 +1,11 @@
 site:
   name: debugging
+  enable_telegram: true
   hosts:
     - debug:
-        rpc:
-          hostname: localhost
-          port: 60000
+      # rpc:
+      #     hostname: localhost
+      #     port: 60000
+        hostname: 0.0.0.0
+        port: 3334
         type: CaptureNode
-        monitor:
-          hostname: 0.0.0.0
-          port: 3334

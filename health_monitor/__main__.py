@@ -1,3 +1,4 @@
+import sys
 import asyncio
 import zmq
 import zmq.asyncio
@@ -15,23 +16,20 @@ def parse_args():
     return parser.parse_args()
 
 
-def setup_application(host):
+def setup_application(hosts, enable_telegram=False):
     loop = asyncio.get_event_loop()
     ctx = zmq.asyncio.Context()
 
     ms = MonitorService()
+    logging.debug("Initializing monitor service")
+    loop.run_until_complete(ms.initialize(enable_telegram))
 
     try:
-        for host in hosts:
-            socket = ctx.socket(zmq.SUB)
-            hostname = host["monitor"]["hostname"]
-            port = host["monitor"]["port"]
-            socket.bind(f'tcp://{hostname}:{port}')
-            socket.setsockopt_string(zmq.SUBSCRIBE, '')
-            logging.info(f"Starting monitor for node {hostname}")
-            asyncio.ensure_future(ms.monitor(socket))
-        asyncio.ensure_future(ms.process_events())
-        loop.run_forever()
+        for host, data in hosts.items():
+            ip = data["hostname"]
+            port = data["port"]
+            loop.run_until_complete(ms.register_node(ctx, host, ip, port))
+        loop.run_until_complete(ms.monitor())
     except KeyboardInterrupt:
         pass
     finally:
@@ -40,7 +38,12 @@ def setup_application(host):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-    config = parse_args().config
-    hosts = parse_config(config)['site']['hosts']
-    setup_application(hosts)
+    logging.basicConfig(level=logging.INFO,
+            format='%(levelname)7s: %(message)s',
+            stream=sys.stderr)
+    logging.getLogger("asyncio").setLevel(logging.INFO)
+    loop = asyncio.get_event_loop()
+    loop.set_debug(enabled=True)
+    config_file = parse_args().config
+    config = parse_config(config_file)
+    setup_application(config["hosts"], config.get("enable_telegram"))

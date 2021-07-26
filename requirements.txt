@@ -3,3 +3,6 @@ Cython==0.29.23
 pycapnp==1.0.0
 PyYAML==5.4.1
 pyzmq==22.0.3
+aiogram==2.14.3
+pathlib==1.0.1
+numpy==1.21.1

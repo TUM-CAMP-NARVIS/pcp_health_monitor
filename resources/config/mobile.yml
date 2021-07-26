@@ -1,0 +1,20 @@
+site:
+  name: NARVIS
+  enable_telegram: true
+  hosts:
+    - cn01:
+        hostname: 192.168.20.30
+        port: 3334
+        type: CaptureNode
+    - cn02:
+        hostname: 192.168.20.31
+        port: 3334
+        type: CaptureNode
+    - cn03:
+        hostname: 192.168.20.32
+        port: 3334
+        type: CaptureNode
+    - cn04:
+        hostname: 192.168.20.33
+        port: 3334
+        type: CaptureNode

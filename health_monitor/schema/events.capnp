@@ -38,6 +38,8 @@ enum HealthStatusUpdate {
   lowLightWarning @3;
   lowFramerateWarning @4;
   writeQueueWarning @5;
+  frameRateInfo @6;
+  imuMovementWarning @7;
 }
 
 struct ApplicationStatusEvent {

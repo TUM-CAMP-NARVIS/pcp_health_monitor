@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 8888
 ENV PYTHONPATH=/usr/src/app
 
-CMD [ "python", "./health_monitor" ]
+CMD [ "python", "./health_monitor", "--config", "./resources/config/mobile.yml"]

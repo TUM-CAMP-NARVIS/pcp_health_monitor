@@ -26,7 +26,6 @@ class MonitorService(object):
         if self.telegram_enabled:
             await initialize_telegram_bot()
 
-
     async def register_node(self, ctx, hostname, ip, port):
         socket = ctx.socket(zmq.SUB)
         connection_string = f'tcp://{ip}:{port}'
@@ -69,6 +68,7 @@ class ComputeNode(object):
         self.frame_rate = []
         self.imu_errors = 0
         self.last_sent_imu = datetime.now()
+        self.last_sent_capture_timeout = datetime.now()
 
     async def listen(self):
         while True:
@@ -103,6 +103,12 @@ class ComputeNode(object):
                 await message_all_users(f"{self.hostname}: imu movement error!", disable_notifications=False)
                 self.last_sent_imu = datetime.now()
 
+        if is_capture_timeout(event):
+            logger.info(f"{self.hostname}: captureTimeout")
+            if (datetime.now() - self.last_sent_capture_timeout).total_seconds() > 10.0:
+                await message_all_users(f"{self.hostname}: capture timeout error!!", disable_notifications=False)
+                self.last_sent_capture_timeout = datetime.now()
+
 
 def is_frame_rate_info(event):
     return event.event.value.healthStatus.healthStatus == schema.events.HealthStatusUpdate.frameRateInfo
@@ -110,3 +116,7 @@ def is_frame_rate_info(event):
 
 def is_imu_movement(event):
     return event.event.value.healthStatus.healthStatus == schema.events.HealthStatusUpdate.imuMovementWarning
+
+
+def is_capture_timeout(event):
+    return event.event.value.healthStatus.healthStatus == schema.events.HealthStatusUpdate.captureDeviceTimeout
